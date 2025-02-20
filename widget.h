@@ -21,7 +21,7 @@ public:
 private slots:
     void on_pushButton_listen_clicked();
     void handleNewConnection();
-    void handleReadData();
+    void handleReadData(QTcpSocket* client);
     void on_pushButton_send_clicked();
 
     void on_pushButton_stop_listen_clicked();
@@ -32,7 +32,6 @@ private slots:
 private:
     Ui::Widget *ui;
     QTcpServer *server;
-    QTcpSocket *currentClient;
     QList<QTcpSocket*> clients;
 };
 #endif // WIDGET_H

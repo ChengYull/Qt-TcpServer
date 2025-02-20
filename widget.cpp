@@ -45,18 +45,18 @@ void Widget::handleNewConnection()
     QString onlineNum = QString::fromStdString(
                 std::to_string(server->findChildren<QTcpSocket*>().size()));
     ui->label_onlineNum->setText(onlineNum);
-    currentClient = server->nextPendingConnection();
+    QTcpSocket *currentClient = server->nextPendingConnection();
     clients.append(currentClient);
     ui->textEdit_info->append("new connection form :" + currentClient->localAddress().toString());
     // 读取客户端传来的数据
-    connect(currentClient, &QTcpSocket::readyRead, this, &Widget::handleReadData);
+    connect(currentClient, &QTcpSocket::readyRead, [=](){ handleReadData(currentClient); });
     // 断开连接后 移除Socket释放内存
-    connect(currentClient, &QTcpSocket::disconnected, this, [this](){handleDisconnect(currentClient);});
+    connect(currentClient, &QTcpSocket::disconnected, [=](){ handleDisconnect(currentClient); });
 }
 
-void Widget::handleReadData()
+void Widget::handleReadData(QTcpSocket* client)
 {
-    QByteArray data = currentClient->readAll();
+    QByteArray data = client->readAll();
     QString utf8Text = QString::fromUtf8(data);
     ui->textEdit_info->append("receive: " + utf8Text);
     qDebug() << "message:" << utf8Text;
