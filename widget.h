@@ -26,11 +26,13 @@ private slots:
 
     void on_pushButton_stop_listen_clicked();
 
-    void on_pushButton_cutoff_clicked();
+    void on_pushButton_clear_clicked();
 
+    void handleDisconnect(QTcpSocket* client);
 private:
     Ui::Widget *ui;
     QTcpServer *server;
-    QTcpSocket *clientSocket;
+    QTcpSocket *currentClient;
+    QList<QTcpSocket*> clients;
 };
 #endif // WIDGET_H
